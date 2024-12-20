@@ -9,12 +9,12 @@
 
 # How to use
 ### 1) Open terminal
-### 2) Install Dependencies
-`pip install -r ./requirements.txt`
-### 3) Create a venv
+### 2) Create a venv
 `python -m venv <VENV NAME>`
-### 4) Activate the venv
+### 3) Activate the venv
 `./<VENV NAME>/Scripts/activate`
+### 4) Install Dependencies
+`pip install -r ./requirements.txt`
 ### 5) Execute the program
 `python ./main.py <PATH TO FOLDER>`
 ### 6) Watchdog will now watch for any events in that specified folder (file creation, file deletion, etc...)

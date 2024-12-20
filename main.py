@@ -27,7 +27,6 @@ def main():
 	except KeyboardInterrupt:
 		# ctrl + c raises a 'KeyboardInterrupt' in python
 		print("Exiting...")
-		sys.exit()
 	except Exception as e:
 		print(f"Error: {e}")
 	finally:

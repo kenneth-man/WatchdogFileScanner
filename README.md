@@ -1,0 +1,20 @@
+# Watchdog File Scanner
+### Python script to check if files are malicious
+### Files are uploaded to a specified folder path where watchdog will look at
+### Uses the Virus Total API https://docs.virustotal.com/reference/overviewto to check the files for viruses
+- ### I'm using Public (free) tier so the program is limited to 4 requests per minute/500 requests per day
+- ### Due to this, only one file should be uploaded per minute
+
+<br>
+
+# How to use
+### 1) Open terminal
+### 2) Install Dependencies
+`pip install -r ./requirements.txt`
+### 3) Create a venv
+`python -m venv <VENV NAME>`
+### 4) Activate the venv
+`./<VENV NAME>/Scripts/activate`
+### 5) Execute the program
+`python ./main.py <PATH TO FOLDER>`
+### 6) Watchdog will now watch for any events in that specified folder (file creation, file deletion, etc...)

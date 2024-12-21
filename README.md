@@ -1,4 +1,4 @@
-# Watchdog File Scanner
+# Watchdog File Scanner WIP
 ### Python script to check if files are malicious
 ### Files are uploaded to a specified folder path where watchdog will look at
 ### Uses the Virus Total API https://docs.virustotal.com/reference/overviewto to check the files for viruses

@@ -9,7 +9,6 @@ def main() -> None:
 	if (not folderPath):
 		return
 
-	# https://python-watchdog.readthedocs.io/en/stable/index.html
 	event_handler = MyOverrideEventHandler()
 	observer = Observer()
 	observer.schedule(event_handler, folderPath, recursive=True)

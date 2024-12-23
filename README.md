@@ -18,3 +18,12 @@
 ### 5) Execute the program
 `python ./main.py <PATH TO FOLDER>`
 ### 6) Watchdog will now watch for any events in that specified folder (file creation, file deletion, etc...)
+
+<br>
+
+# Updating dependencies
+### If you're adding new dependencies and need to update the `requirements.txt`
+### 1) Activate the venv
+### 2) Pip install your new dependencies
+### 3) `pip freeze -l > requirements.txt`
+### 4) Commit changes

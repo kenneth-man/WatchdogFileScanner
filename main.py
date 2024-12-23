@@ -1,9 +1,11 @@
 import time
+from dotenv import load_dotenv
 from watchdog.observers import Observer
 from utils import validateFolderPath
 from watchdogUtils import MyOverrideEventHandler
 
 def main() -> None:
+	load_dotenv()
 	folderPath = validateFolderPath()
 
 	if (not folderPath):

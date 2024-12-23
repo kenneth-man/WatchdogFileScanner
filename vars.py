@@ -1,0 +1,1 @@
+apiBaseUrl = "https://www.virustotal.com/api/v3"

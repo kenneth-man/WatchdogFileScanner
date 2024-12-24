@@ -2,7 +2,11 @@ from watchdog.events import (
 	FileSystemEvent,
 	FileSystemEventHandler,
 	DirCreatedEvent,
-	DirMovedEvent
+	DirMovedEvent,
+	DirModifiedEvent,
+	FileCreatedEvent,
+	FileMovedEvent,
+	FileModifiedEvent
 )
 import os
 from virusTotalUtils import uploadFile, getAnalysis
@@ -16,35 +20,37 @@ class MyOverrideEventHandler(FileSystemEventHandler):
 		if (
 			(
 				type(event) is DirCreatedEvent or
-				type(event) is DirMovedEvent
+				type(event) is DirMovedEvent or
+				type(event) is DirModifiedEvent
 			) and
 			event.is_directory
 		):
 			print("Error: Please upload a single file, not a folder/directory")
 			os._exit(1)
-		print(f"Detected file: {event.src_path}")
 
-		uploadedFileId = None
+		print(f"{event.src_path} was {event.event_type}")
 
-		try:
-			uploadRes = uploadFile(event.src_path)
+		if (
+			(
+				type(event) is FileCreatedEvent or
+				type(event) is FileMovedEvent or
+				type(event) is FileModifiedEvent
+			) and
+			not event.is_directory
+		):
+			uploadedFileId = None
 
-			match uploadRes.status_code:
-				case 200:
-					print("Successfully Uploaded File")
-					uploadedFileId = uploadRes.data.id
-				case 204:
-					print("Daily or Per Minute request quota reached - Please try again later")
-				case _:
-					print(f"Error: {uploadRes.reason}")
-					print(f"Error Text: {uploadRes.text}")
-		except Exception as e:
-			print(f"Error: {e}")
-			print("Something went wrong when uploading file")
-			os._exit(1)
-		
-		if uploadedFileId == None:
-			return
-		
-		print(f"uploadedFileId {uploadedFileId}")
+			try:
+				uploadedFileId = uploadFile(event.src_path)
+			except Exception as e:
+				print(f"Error: {e}")
+				print("Something went wrong when uploading file")
+				os._exit(1)
+
+			if uploadedFileId == None:
+				return
+
+			analysis = getAnalysis(uploadedFileId)
+			print(f"analysis {analysis}")
+
 		

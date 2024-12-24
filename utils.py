@@ -8,9 +8,9 @@ def validateFolderPath() -> str | None:
 		print("Error: Incorrect command. Please follow the format: " +
 			"`python ./main.py <PATH TO FOLDER>`")
 		return
-	
+
 	folderPath = sys.argv[len(sys.argv) - 1]
-	
+
 	if (not os.path.exists(folderPath)):
 		print("Error: The specified path does not exist")
 		return
@@ -22,5 +22,5 @@ def validateFolderPath() -> str | None:
 	if (len(os.listdir(folderPath)) != 0):
 		print("Error: The specified directory is not empty")
 		return
-	
+
 	return folderPath

@@ -22,7 +22,7 @@ def main() -> None:
 			time.sleep(1)
 	except KeyboardInterrupt:
 		# ctrl + c raises a 'KeyboardInterrupt' in python
-		print("Exiting program...")
+		print("Exiting program")
 	except Exception as e:
 		print(f"Error: {e}")
 	finally:

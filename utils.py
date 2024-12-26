@@ -1,7 +1,7 @@
 import sys
 import os
-# import shutil
-# shutil.move(event.src_path, r'C:\Users\win10\Desktop\Text_Documents')
+import shutil
+from enums import ModifyAction
 
 def validateFolderPath() -> str | None:
 	if len(sys.argv) != 2:
@@ -24,3 +24,18 @@ def validateFolderPath() -> str | None:
 		return
 
 	return folderPath
+
+def modifyFile(
+	modifyAction: ModifyAction,
+	filePath: str,
+	destinationPath: str = None
+) -> None:
+	match modifyAction:
+		case ModifyAction.COPY:
+			shutil.copy(filePath, destinationPath)
+		case ModifyAction.DELETE:
+			shutil.rmtree(filePath)
+		case ModifyAction.MOVE:
+			shutil.move(filePath, destinationPath)
+		case _:
+			print("Error: Invalid enum given for ModifyAction")

@@ -55,3 +55,23 @@ def getAnalysis(fileId: str) -> str | None:
 		return None
 
 	return response.text
+
+def printAnalysis(jsonAnalysis):
+	print("====================Results====================")
+	print("Total number of reports saying that the file is...")
+	print(f"Malicious: {jsonAnalysis["data"]["attributes"]["stats"]["malicious"]}")
+	print(f"Suspicious: {jsonAnalysis["data"]["attributes"]["stats"]["suspicious"]}")
+	print(f"Undetected: {jsonAnalysis["data"]["attributes"]["stats"]["undetected"]}")
+	print(f"Harmless: {jsonAnalysis["data"]["attributes"]["stats"]["harmless"]}")
+	print("\n")
+	print("The engines used to analyze the file...")
+	engines = jsonAnalysis["data"]["attributes"]["results"].values()
+	enginesList = list(engines)
+	enginesList.sort(key=lambda x: x["engine_name"].casefold())
+	for val in enginesList:
+		print(f"Engine: {val["engine_name"]}")
+		print(f"Engine Version: {val["engine_version"]}")
+		print(f"Engine Update: {val["engine_update"]}")
+		print(f"Category: {val["category"]}")
+		print(f"Result: {val["category"] if val["category"] else "null"}")
+		print("\n")

@@ -9,7 +9,8 @@ from watchdog.events import (
 	FileModifiedEvent
 )
 import os
-from virusTotalUtils import uploadFile, getAnalysis
+import json
+from virusTotalUtils import uploadFile, getAnalysis, printAnalysis
 
 # https://python-watchdog.readthedocs.io/en/stable/index.html
 class MyOverrideEventHandler(FileSystemEventHandler):
@@ -50,7 +51,7 @@ class MyOverrideEventHandler(FileSystemEventHandler):
 			if uploadedFileId == None:
 				return
 
-			analysis = getAnalysis(uploadedFileId)
-			print(f"analysis {analysis}")
-
+			strAnalysis = getAnalysis(uploadedFileId)
+			jsonAnalysis = json.loads(strAnalysis)
+			printAnalysis(jsonAnalysis)
 		

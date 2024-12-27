@@ -3,6 +3,9 @@ import requests
 import os
 import json
 from vars import apiBaseUrl
+from utils import modifyFile
+from enums import ModifyAction
+from datetime import date
 
 # https://docs.virustotal.com/reference/overview
 def uploadFile(filePath: str) -> str | None:
@@ -56,7 +59,7 @@ def getAnalysis(fileId: str) -> str | None:
 
 	return response.text
 
-def printAnalysis(jsonAnalysis):
+def printAnalysis(jsonAnalysis) -> None:
 	print("====================Results====================")
 	print("Total number of reports saying that the file is...")
 	print(f"Malicious: {jsonAnalysis["data"]["attributes"]["stats"]["malicious"]}")
@@ -75,3 +78,27 @@ def printAnalysis(jsonAnalysis):
 		print(f"Category: {val["category"]}")
 		print(f"Result: {val["category"] if val["category"] else "null"}")
 		print("\n")
+
+def handleAnalysis(
+	jsonAnalysis,
+	filePath: str
+) -> None:
+	threshold = 3
+
+	if (
+		int(jsonAnalysis["data"]["attributes"]["stats"]["malicious"]) > threshold or
+		int(jsonAnalysis["data"]["attributes"]["stats"]["suspicious"]) > threshold
+	):
+		print("Uploaded file was found to be Malicious or Suspicious and will be deleted")
+		modifyFile(ModifyAction.DELETE, filePath)
+	else:
+		today = str(date.today())
+		destinationPath = f"./{today}-WATCHDOG-VERIFIED"
+
+		if (os.path.exists(destinationPath) and os.path.isdir(destinationPath)):
+			print(f"Uploaded file was found to be Safe and will be moved to {destinationPath}")
+		else:
+			os.makedirs(destinationPath)
+			print(f"Uploaded file was found to be Safe and will be moved to a new directory {destinationPath}")
+
+		modifyFile(ModifyAction.MOVE, filePath, destinationPath)

@@ -10,7 +10,7 @@ from watchdog.events import (
 )
 import os
 import json
-from virusTotalUtils import uploadFile, getAnalysis, printAnalysis
+from virusTotalUtils import uploadFile, getAnalysis, printAnalysis, handleAnalysis
 
 # https://python-watchdog.readthedocs.io/en/stable/index.html
 class MyOverrideEventHandler(FileSystemEventHandler):
@@ -54,4 +54,5 @@ class MyOverrideEventHandler(FileSystemEventHandler):
 			strAnalysis = getAnalysis(uploadedFileId)
 			jsonAnalysis = json.loads(strAnalysis)
 			printAnalysis(jsonAnalysis)
+			handleAnalysis(jsonAnalysis, event.src_path)
 		

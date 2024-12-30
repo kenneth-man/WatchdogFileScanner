@@ -60,6 +60,7 @@ def getAnalysis(fileId: str) -> str | None:
 	return response.text
 
 def printAnalysis(jsonAnalysis) -> None:
+	print("\n")
 	print("====================Results====================")
 	print("Total number of reports saying that the file is...")
 	print(f"Malicious: {jsonAnalysis["data"]["attributes"]["stats"]["malicious"]}")
@@ -93,7 +94,7 @@ def handleAnalysis(
 		modifyFile(ModifyAction.DELETE, filePath)
 	else:
 		today = str(date.today())
-		destinationPath = f"./{today}-WATCHDOG-VERIFIED"
+		destinationPath = f"../{today}-WATCHDOG-VERIFIED"
 
 		if (os.path.exists(destinationPath) and os.path.isdir(destinationPath)):
 			print(f"Uploaded file was found to be Safe and will be moved to {destinationPath}")

@@ -8,7 +8,7 @@ def main() -> None:
 	load_dotenv()
 	folderPath = validateFolderPath()
 
-	if (not folderPath):
+	if not folderPath:
 		return
 
 	event_handler = MyOverrideEventHandler()

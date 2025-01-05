@@ -10,7 +10,12 @@ from watchdog.events import (
 )
 import os
 import json
-from virusTotalUtils import uploadFile, getAnalysis, printAnalysis, handleAnalysis
+from virusTotalUtils import (
+	uploadFile,
+	getAnalysis,
+	printAnalysis,
+	handleAnalysis
+)
 from utils import validateFileExtensionsMatchesContent
 
 # https://python-watchdog.readthedocs.io/en/stable/index.html
@@ -40,13 +45,20 @@ class MyOverrideEventHandler(FileSystemEventHandler):
 			) and
 			not event.is_directory
 		):
-			if(not validateFileExtensionsMatchesContent(event.src_path)):
+			if not validateFileExtensionsMatchesContent(event.src_path):
 				return
 
 			uploadedFileId = None
 
 			try:
-				uploadedFileId = uploadFile(event.src_path)
+				fileSizeBytes = os.path.getsize(event.src_path)
+				fileSizeKb = fileSizeBytes / 1024
+				fileSizeMb = fileSizeKb / 1024
+
+				uploadedFileId = uploadFile(
+					event.src_path,
+					True if fileSizeMb > 32.0 else False
+				)
 			except Exception as e:
 				print(f"Error: {e}")
 				print("Something went wrong when uploading file")

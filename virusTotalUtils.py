@@ -8,7 +8,10 @@ from enums import ModifyAction
 from datetime import date
 
 # https://docs.virustotal.com/reference/overview
-def uploadFile(filePath: str) -> str | None:
+def uploadFile(
+	filePath: str,
+	largeFile: bool = False
+) -> str | None:
 	print("Uploading file to VirusTotal API v3")
 
 	slash = "\\" if "\\" in filePath else "/"
@@ -20,11 +23,27 @@ def uploadFile(filePath: str) -> str | None:
 		"x-apikey": os.getenv("VIRUS_TOTAL_API_KEY")
 	}
 
-	response = requests.post(
-		f"{apiBaseUrl}/files",
-		headers=headers,
-		files=files
-	)
+	response = None
+
+	if largeFile:
+		uploadUrlResponse = requests.get(
+			f"{apiBaseUrl}/files/upload_url",
+			headers=headers
+		)
+		uploadUrlResponseJson = json.loads(uploadUrlResponse.text)
+		formData = {"url": uploadUrlResponseJson["data"]}
+		urlScanResponse = requests.post(
+			f"{apiBaseUrl}/urls",
+			headers=headers,
+			data=formData
+		)
+		response = urlScanResponse
+	else:
+		response = requests.post(
+			f"{apiBaseUrl}/files",
+			headers=headers,
+			files=files
+		)
 
 	match response.status_code:
 		case 200:
@@ -72,6 +91,7 @@ def printAnalysis(jsonAnalysis) -> None:
 	engines = jsonAnalysis["data"]["attributes"]["results"].values()
 	enginesList = list(engines)
 	enginesList.sort(key=lambda x: x["engine_name"].casefold())
+
 	for val in enginesList:
 		print(f"Engine: {val["engine_name"]}")
 		print(f"Engine Version: {val["engine_version"]}")
@@ -96,7 +116,7 @@ def handleAnalysis(
 		today = str(date.today())
 		destinationPath = f"../{today}-WATCHDOG-VERIFIED"
 
-		if (os.path.exists(destinationPath) and os.path.isdir(destinationPath)):
+		if os.path.exists(destinationPath) and os.path.isdir(destinationPath):
 			print(f"Uploaded file was found to be Safe and will be moved to {destinationPath}")
 		else:
 			os.makedirs(destinationPath)

@@ -1,4 +1,3 @@
-from requests.models import Response
 import requests
 import os
 import json
